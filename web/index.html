@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<script src="js/Chart.min.js"></script>
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/utils.js"></script>
+		
+		<script>
+			<!-- common config -->
+		
+		</script>
+
+	</head>
+<script>
+	$(document).ready(function() {
+		var ANDHWOCtx = $("#ANDHWO").get(0).getContext("2d");
+	
+		var chartData = [];
+		var labelData = [];
+		$.get("/api/ANDHWO", function(data) {
+			//var color = randomColor();
+			var color = "#FF2211";
+			for(var i=0; i < data.length; i++) {
+			console.log("data " + i, data[i]);
+				chartData.push({
+		            label: "",
+		            fillColor: color,
+		            strokeColor: color,
+		            highlightFill: color,
+		            highlightStroke: color,
+		            data: [ parseInt(data[i].counter) ] 
+	        	});
+				
+				labelData.push( data[i].user_host );
+			}
+			console.log("ANDHWO data", chartData);
+			console.log("ANDHWO label", labelData);
+			
+			new Chart(ANDHWOCtx).Bar( { labels: labelData, datasets: chartData } );
+		}); //end get
+	}); //document ready close
+</script>
+
+<body>
+	<h1>MySql Statistics</h1>
+	
+	<h2>Numbers of query group by host</h2>
+
+	<div align="center">
+		<canvas id="ANDHWO" width="400" height="400"></canvas>
+	</div>
+	
+</body>
+</html>
