@@ -1,8 +1,14 @@
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="css/jquery.dynatable.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+	
 		<script src="js/Chart.min.js"></script>
 		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
 		<script src="js/utils.js"></script>
+		<script src="js/jquery.dynatable.js"></script>
 		
 		<script>
 			<!-- common config -->
@@ -12,42 +18,82 @@
 	</head>
 <script>
 	$(document).ready(function() {
+
+		// PIE CHART
 		var ANDHWOCtx = $("#ANDHWO").get(0).getContext("2d");
 	
 		var chartData = [];
 		var labelData = [];
 		$.get("/api/ANDHWO", function(data) {
-			//var color = randomColor();
 			var color = "#FF2211";
 			for(var i=0; i < data.length; i++) {
-			console.log("data " + i, data[i]);
-				chartData.push({
-		            label: "",
-		            fillColor: color,
-		            strokeColor: color,
-		            highlightFill: color,
-		            highlightStroke: color,
-		            data: [ parseInt(data[i].counter) ] 
-	        	});
+				chartData.push( data[i].counter );
 				
 				labelData.push( data[i].user_host );
 			}
-			console.log("ANDHWO data", chartData);
-			console.log("ANDHWO label", labelData);
 			
-			new Chart(ANDHWOCtx).Bar( { labels: labelData, datasets: chartData } );
+			new Chart(ANDHWOCtx).Bar( 
+				{ 
+					labels: labelData, 
+					datasets: [ {
+			            label: "",
+			            fillColor: color,
+			            strokeColor: color,
+			            highlightFill: color,
+			            highlightStroke: color,
+			            data: chartData
+		        	} ]
+	         } );
 		}); //end get
+
+
+		//END PIE CHART
+		
+		
+		//TABLE
+		
+		
+		var tableData = [];
+		$.get("/api/SHDYTQ", function(data) {
+			$('#topQuery').dynatable({
+				dataset: {
+		        	records: data
+		      	}
+		    });
+		}); //end get
+		
+		
+		//END TABLE
+		
 	}); //document ready close
 </script>
 
 <body>
-	<h1>MySql Statistics</h1>
-	
-	<h2>Numbers of query group by host</h2>
-
-	<div align="center">
-		<canvas id="ANDHWO" width="400" height="400"></canvas>
+	<div class="container">
+		<h1>MYSQL - Statistics</h1>
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Top Host</h2>
+				<canvas id="ANDHWO" width="400" height="400"></canvas>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Top Query</h2>
+				<table class="table table-striped" id="topQuery">
+				  <thead>
+				    <th>argument</th>
+				    <th>server_id</th>
+				    <th>command_type</th>
+				    <th>user_host</th>
+				    <th>event_time</th>
+				  </thead>
+				  <tbody>
+				  </tbody>
+				</table>
+			</div>
+		</div>
 	</div>
-	
 </body>
 </html>

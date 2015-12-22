@@ -4,6 +4,10 @@
 package it.fabryprog.mysql.statistics;
 
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -26,6 +30,22 @@ public class StandAlone {
 	
 	public void close() throws Exception {
 		MySqlConnector.getInstance().disableLog();
+	}
+	
+	public void purge() throws Exception {
+		 final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+	     final Runnable p = new Runnable() {
+	       public void run() { 
+	   		try {
+				MySqlConnector.getInstance().purge(Integer.valueOf(prop.getProperty("purge.time.min")));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	       }
+	     };
+			 
+	     scheduler.scheduleAtFixedRate(p, 1, Integer.valueOf(prop.getProperty("purge.delay.min")), TimeUnit.SECONDS);
 	}
 	
 	public void run() throws Exception {
@@ -60,9 +80,18 @@ public class StandAlone {
 
 		StandAlone instance = null;
 		try {
+			
 			instance = new StandAlone();
 			instance.init();
+
+			if(Boolean.valueOf(prop.getProperty("purge.enabled"))) {
+				instance.purge();
+			}
+			
 			instance.run();
+			
+			
+			
 		} finally {
 			instance.close();
 		}

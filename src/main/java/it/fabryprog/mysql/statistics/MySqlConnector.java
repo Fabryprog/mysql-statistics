@@ -43,6 +43,38 @@ public class MySqlConnector  {
 		this.conn = DriverManager.getConnection (StandAlone.prop.getProperty("url"), StandAlone.prop.getProperty("username"), StandAlone.prop.getProperty("password"));
 	}
 
+	public void purge(Integer minutes) throws Exception {
+		this.disableLog();
+		
+		PreparedStatement stmt = null;
+		try {
+			
+			String query = "RENAME TABLE mysql.general_log TO mysql.general_log_temp";
+			stmt = conn.prepareStatement(query);
+			
+			stmt.executeUpdate();
+			stmt.close();
+			
+			query = "delete from mysql.general_log_temp where event_time < DATE_SUB(NOW(), INTERVAL ? MINUTE)";
+			stmt = conn.prepareStatement(query);
+			stmt.setInt(1, minutes);
+			
+			stmt.executeUpdate();
+			stmt.close();
+						
+			query = "RENAME TABLE mysql.general_log_temp TO mysql.general_log";
+			stmt = conn.prepareStatement(query);
+			
+			stmt.executeUpdate();
+			
+		} finally {
+			try {stmt.close();} catch(Exception e) {}
+		}
+		
+		this.enableLog();
+	}
+
+	
 	public void enableLog() throws Exception {
 		PreparedStatement stmt = null;
 		try {
