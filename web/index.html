@@ -49,13 +49,26 @@
 
 		//END PIE CHART
 		
+		//TABLE
+		
+		
+		var tableData = [];
+		$.get("/api/FGHIWW", function(data) {
+			$('#topQuery').dynatable({
+				dataset: {
+		        	records: data
+		      	}
+		    });
+		}); //end get
+		
+		//END TABLE
 		
 		//TABLE
 		
 		
 		var tableData = [];
 		$.get("/api/SHDYTQ", function(data) {
-			$('#topQuery').dynatable({
+			$('#allQuery').dynatable({
 				dataset: {
 		        	records: data
 		      	}
@@ -82,6 +95,21 @@
 			<div class="col-md-12">
 				<h2>Top Query</h2>
 				<table class="table table-striped" id="topQuery">
+				  <thead>
+				    <th>user_host</th>
+				    <th>argument</th>
+				    <th>counter</th>
+				  </thead>
+				  <tbody>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<h2>All Query</h2>
+				<table class="table table-striped" id="allQuery">
 				  <thead>
 				    <th>argument</th>
 				    <th>server_id</th>
