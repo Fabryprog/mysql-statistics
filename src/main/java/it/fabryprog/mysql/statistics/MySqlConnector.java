@@ -67,6 +67,8 @@ public class MySqlConnector  {
 			
 			stmt.executeUpdate();
 			
+			System.out.println("***** PURGE! ***** ");
+			
 		} finally {
 			try {stmt.close();} catch(Exception e) {}
 		}
@@ -88,6 +90,9 @@ public class MySqlConnector  {
 			stmt = conn.prepareStatement(query);
 
 			stmt.executeQuery();
+		
+			System.out.println("***** general_log ENABLED ***** ");
+
 		} finally {
 			try {stmt.close();} catch(Exception e) {}
 		}
@@ -100,8 +105,11 @@ public class MySqlConnector  {
 			stmt = conn.prepareStatement(query);
 
 			stmt.executeQuery();
+			
+			System.out.println("***** general_log DISABLED ***** ");
+			
 		} finally {
-			try {stmt.close();} catch(Exception e) {}
+			try {stmt.close();} catch(Exception e) {e.printStackTrace();}
 		}
 	}
 

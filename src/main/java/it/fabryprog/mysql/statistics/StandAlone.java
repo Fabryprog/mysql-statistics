@@ -93,11 +93,23 @@ public class StandAlone {
 				instance.purge();
 			}
 			
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				   @Override
+				   public void run() {
+						try {
+							MySqlConnector.getInstance().disableLog();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				   }
+			});
+
 			instance.run();
 			
 		} finally {
 			instance.close();
 		}
+
 		
 	}
 }
