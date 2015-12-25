@@ -1,0 +1,157 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/jquery.dynatable.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+	
+		<script src="js/Chart.min.js"></script>
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/utils.js"></script>
+		<script src="js/jquery.dynatable.js"></script>
+		
+		<script>
+			<!-- common config -->
+		
+		</script>
+
+	</head>
+<script>
+
+		var ANDHWO_f = function() { 
+			// PIE CHART
+			var ANDHWOCtx = $("#ANDHWO").get(0).getContext("2d");
+		
+			var chartData = [];
+			var labelData = [];
+		
+			$.get("/api/ANDHWO", function(data) {
+				var color = "#FF2211";
+				for(var i=0; i < data.length; i++) {
+					chartData.push( data[i].counter );
+					
+					labelData.push( data[i].user_host );
+				}
+				
+				new Chart(ANDHWOCtx).Bar( 
+					{ 
+						labels: labelData, 
+						datasets: [ {
+				            label: "",
+				            fillColor: color,
+				            strokeColor: color,
+				            highlightFill: color,
+				            highlightStroke: color,
+				            data: chartData
+			        	} ]
+		         } );
+			}); //end get
+		};
+		
+		//END PIE CHART
+		
+		//TABLE
+		var FGHIWW_f = function() {
+			var tableData = [];
+			$.get("/api/FGHIWW", function(data) {
+				$('#topQuery').dynatable({
+					dataset: {
+			        	records: data
+			      	}
+			    });
+			}); //end get
+		};
+		
+		//END TABLE
+		
+		//TABLE
+		
+		var SHDYTQ_f = function() {
+			var tableData = [];
+			$.get("/api/SHDYTQ", function(data) {
+				$('#allQuery').dynatable({
+					dataset: {
+			        	records: data
+			      	}
+			    });
+			}); //end get
+		};
+		
+		//END TABLE
+
+	$(document).ready(function() {
+		ANDHWO_f(); // TOP HOST
+		FGHIWW_f(); // TOP QUERY
+		SHDYTQ_f(); // ALL QUERY
+	}); //document ready close
+</script>
+
+<body>
+	<div class="container">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="https://github.com/Fabryprog/mysql-statistics">mysql-statistics</a>
+		    </div>
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li class="active"><a href="#tophost">Top Host <span class="sr-only"></span></a></li>
+		        <li><a href="#topquery">Top Query</a></li>
+		        <li><a href="#allquery">All Query</a></li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+
+		<a name="tophost"></a>
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Top Host<small>&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-success" onclick="ANDHWO_f();"><i class="fa fa-refresh"></i></button></small></h2>
+				<canvas id="ANDHWO" width="400" height="400"></canvas>
+			</div>
+		</div>
+		
+		<a name="topquery"></a>
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Top Query<small>&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-success" onclick="FGHIWW_f();"><i class="fa fa-refresh"></i></button></small></h2>
+				<table class="table table-striped" id="topQuery">
+				  <thead>
+				    <th>user_host</th>
+				    <th>argument</th>
+				    <th>counter</th>
+				  </thead>
+				  <tbody>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+		
+		<a name="allquery"></a>
+		<div class="row">
+			<div class="col-md-12">
+				<h2>All Query<small>&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-success" onclick="SHDYTQ_f();"><i class="fa fa-refresh"></i></button></small></h2>
+				<table class="table table-striped" id="allQuery">
+				  <thead>
+				    <th>argument</th>
+				    <th>server_id</th>
+				    <th>command_type</th>
+				    <th>user_host</th>
+				    <th>event_time</th>
+				  </thead>
+				  <tbody>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+		<div class="panel-footer">Developed by FabryProg: <a href="http://www.fabryprog.it" target="_blank">WWW</a> - <a href="https://github.com/Fabryprog" target="_blank">Github</a></div>
+	</div>
+</body>
+</html>
