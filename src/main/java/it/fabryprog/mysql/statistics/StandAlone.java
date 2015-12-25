@@ -44,7 +44,7 @@ public class StandAlone {
 	       }
 	     };
 			 
-	     scheduler.scheduleAtFixedRate(p, 1, Integer.valueOf(prop.getProperty("purge.delay.min")), TimeUnit.SECONDS);
+	     scheduler.scheduleAtFixedRate(p, 1, Integer.valueOf(prop.getProperty("purge.delay.min")), TimeUnit.MINUTES);
 	}
 	
 	public void run() throws Exception {
