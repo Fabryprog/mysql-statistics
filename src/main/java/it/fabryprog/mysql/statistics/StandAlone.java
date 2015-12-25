@@ -6,7 +6,6 @@ package it.fabryprog.mysql.statistics;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.server.Handler;
@@ -76,7 +75,13 @@ public class StandAlone {
 	public static void main(String[] args) throws Exception {
 		final String configDefault = "/config.properties";
 		prop = new Properties();
+
 		prop.load(StandAlone.class.getResourceAsStream(configDefault));
+		
+		Properties settings = new Properties();
+		settings.load(StandAlone.class.getResourceAsStream("/settings.properties"));
+		
+		prop.putAll(settings);
 
 		StandAlone instance = null;
 		try {
@@ -89,8 +94,6 @@ public class StandAlone {
 			}
 			
 			instance.run();
-			
-			
 			
 		} finally {
 			instance.close();
