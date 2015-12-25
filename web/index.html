@@ -3,6 +3,7 @@
 		<link rel="stylesheet" type="text/css" href="css/jquery.dynatable.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 	
 		<script src="js/Chart.min.js"></script>
 		<script src="js/jquery-1.11.3.min.js"></script>
@@ -17,67 +18,72 @@
 
 	</head>
 <script>
-	$(document).ready(function() {
 
-		// PIE CHART
-		var ANDHWOCtx = $("#ANDHWO").get(0).getContext("2d");
-	
-		var chartData = [];
-		var labelData = [];
-		$.get("/api/ANDHWO", function(data) {
-			var color = "#FF2211";
-			for(var i=0; i < data.length; i++) {
-				chartData.push( data[i].counter );
+		var ANDHWO_f = function() { 
+			// PIE CHART
+			var ANDHWOCtx = $("#ANDHWO").get(0).getContext("2d");
+		
+			var chartData = [];
+			var labelData = [];
+		
+			$.get("/api/ANDHWO", function(data) {
+				var color = "#FF2211";
+				for(var i=0; i < data.length; i++) {
+					chartData.push( data[i].counter );
+					
+					labelData.push( data[i].user_host );
+				}
 				
-				labelData.push( data[i].user_host );
-			}
-			
-			new Chart(ANDHWOCtx).Bar( 
-				{ 
-					labels: labelData, 
-					datasets: [ {
-			            label: "",
-			            fillColor: color,
-			            strokeColor: color,
-			            highlightFill: color,
-			            highlightStroke: color,
-			            data: chartData
-		        	} ]
-	         } );
-		}); //end get
-
-
+				new Chart(ANDHWOCtx).Bar( 
+					{ 
+						labels: labelData, 
+						datasets: [ {
+				            label: "",
+				            fillColor: color,
+				            strokeColor: color,
+				            highlightFill: color,
+				            highlightStroke: color,
+				            data: chartData
+			        	} ]
+		         } );
+			}); //end get
+		};
+		
 		//END PIE CHART
 		
 		//TABLE
-		
-		
-		var tableData = [];
-		$.get("/api/FGHIWW", function(data) {
-			$('#topQuery').dynatable({
-				dataset: {
-		        	records: data
-		      	}
-		    });
-		}); //end get
+		var FGHIWW_f = function() {
+			var tableData = [];
+			$.get("/api/FGHIWW", function(data) {
+				$('#topQuery').dynatable({
+					dataset: {
+			        	records: data
+			      	}
+			    });
+			}); //end get
+		};
 		
 		//END TABLE
 		
 		//TABLE
 		
-		
-		var tableData = [];
-		$.get("/api/SHDYTQ", function(data) {
-			$('#allQuery').dynatable({
-				dataset: {
-		        	records: data
-		      	}
-		    });
-		}); //end get
-		
+		var SHDYTQ_f = function() {
+			var tableData = [];
+			$.get("/api/SHDYTQ", function(data) {
+				$('#allQuery').dynatable({
+					dataset: {
+			        	records: data
+			      	}
+			    });
+			}); //end get
+		};
 		
 		//END TABLE
-		
+
+	$(document).ready(function() {
+		ANDHWO_f(); // TOP HOST
+		FGHIWW_f(); // TOP QUERY
+		SHDYTQ_f(); // ALL QUERY
 	}); //document ready close
 </script>
 
@@ -107,7 +113,7 @@
 		<a name="tophost"></a>
 		<div class="row">
 			<div class="col-md-6">
-				<h2>Top Host</h2>
+				<h2>Top Host<small>&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-success" onclick="ANDHWO_f();"><i class="fa fa-refresh"></i></button></small></h2>
 				<canvas id="ANDHWO" width="400" height="400"></canvas>
 			</div>
 		</div>
@@ -115,7 +121,7 @@
 		<a name="topquery"></a>
 		<div class="row">
 			<div class="col-md-12">
-				<h2>Top Query</h2>
+				<h2>Top Query<small>&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-success" onclick="FGHIWW_f();"><i class="fa fa-refresh"></i></button></small></h2>
 				<table class="table table-striped" id="topQuery">
 				  <thead>
 				    <th>user_host</th>
@@ -131,7 +137,7 @@
 		<a name="allquery"></a>
 		<div class="row">
 			<div class="col-md-12">
-				<h2>All Query</h2>
+				<h2>All Query<small>&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-success" onclick="SHDYTQ_f();"><i class="fa fa-refresh"></i></button></small></h2>
 				<table class="table table-striped" id="allQuery">
 				  <thead>
 				    <th>argument</th>
