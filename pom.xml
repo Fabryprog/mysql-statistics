@@ -4,7 +4,7 @@
 
 	<groupId>it.fabryprog.mysql.statistics</groupId>
 	<artifactId>mysql-statistics</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>mysql-statistics</name>
