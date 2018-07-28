@@ -11,6 +11,7 @@ The software enable log output feature (http://dev.mysql.com/doc/refman/5.7/en/q
 > mvn clean package
 
 ## How to RUN
+
 1. Enter into dir folder
 1. Edit config file config.properties with right parameters 
 2. Launch dist jar with command 
@@ -25,6 +26,3 @@ The software enable log output feature (http://dev.mysql.com/doc/refman/5.7/en/q
 * dynatable - http://www.dynatable.com/
 * font awesome - https://fortawesome.github.io/
 
-# Changelog
-
-1. 
